@@ -9,6 +9,20 @@
 // target for the player.
 window.addEventListener("load",function() {
 
+/* Quintus core */
+var Quintus = require('Quintus/lib/quintus');
+
+/* official Quintus modules */ 
+require('Quintus/lib/quintus_sprites')(Quintus);
+require('Quintus/lib/quintus_scenes')(Quintus);
+require('Quintus/lib/quintus_touch')(Quintus);
+require('Quintus/lib/quintus_ui')(Quintus);
+require('Quintus/lib/quintus_anim')(Quintus);
+require('Quintus/lib/quintus_audio')(Quintus);
+require('Quintus/lib/quintus_input')(Quintus);
+require('Quintus/lib/quintus_2d')(Quintus);
+require('Quintus/lib/quintus_tmx')(Quintus);
+
 // Set up an instance of the Quintus engine  and include
 // the Sprites, Scenes, Input and 2D module. The 2D module
 // includes the `TileLayer` class as well as the `2d` componet.

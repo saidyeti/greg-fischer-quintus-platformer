@@ -1,0 +1,16 @@
+{
+  "name": "greg-fischer-quintus-platformer",
+  "version": "0.1.0",
+  "description": "You're Greg Fischer. Save the Day.",
+  "main": "dist/index.html",
+  "dependencies": {
+    "quintus": "git+https://github.com/cykod/Quintus.git"
+  },
+  "author": "Ben Wiley and Hannah Fitzgerald",
+  "license": "MIT",
+  "devDependencies": {
+    "browserify": "^13.0.0",
+    "gulp": "^3.9.0",
+    "vinyl-source-stream": "^1.1.0"
+  }
+}
