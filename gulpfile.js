@@ -13,10 +13,16 @@ gulp.task('copy:html', function () {
 });
 
 gulp.task('copy:assets', [
+  'copy:assetsDir',
   'copy:audio',
   'copy:data',
   'copy:images'
 ]);
+
+gulp.task('copy:assetsDir', function () {
+  return gulp.src('./src/assets/*')
+    .pipe(gulp.dest('./dist/assets/'));
+});
 
 gulp.task('copy:audio', function () {
   return gulp.src('./src/audio/*')
@@ -46,6 +52,7 @@ gulp.task('browserify', function() {
 
 gulp.task('watch', function () {
   gulp.watch(['src/index.html'], ['copy:html']);
+  gulp.watch(['src/assets/**/*'], ['copy:assetsDir']);
   gulp.watch(['src/audio/*'], ['copy:audio']);
   gulp.watch(['src/data/*'], ['copy:data']);
   gulp.watch(['src/images/*'], ['copy:images']);
