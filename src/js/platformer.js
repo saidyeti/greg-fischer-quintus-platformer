@@ -405,16 +405,6 @@ Q.Collectable.extend("Heart", {
   }
 });
 
-Q.assetTypes['svg'] = 'Image';
-Q.scene('background', function (stage) {
-  var background = stage.insert(new Q.Repeater({ 
-    asset: 'background.svg',
-    scale: 0.5
-  }));
-  
-
-});
-
 Q.scene("level1",function(stage) {
   Q.stageTMX("level1.tmx",stage);
 
@@ -435,6 +425,7 @@ Q.scene('hud',function(stage) {
   container.fit(20);
 });
 
+Q.assetTypes['svg'] = 'Image';
 Q.loadTMX("level1.tmx, collectables.json, doors.json, enemies.json, fire.mp3, jump.mp3, heart.mp3, hit.mp3, coin.mp3, old_kentucky.mp3, innovation.mp3, breakthrough.mp3, expands_the_mind.mp3, player.json, player.png, background.svg", function() {
 
     Q.compileSheets("player.png","player.json");
@@ -463,7 +454,6 @@ Q.loadTMX("level1.tmx, collectables.json, doors.json, enemies.json, fire.mp3, ju
     Q.animations("fly", EnemyAnimations);
     Q.animations("slime", EnemyAnimations);
     Q.animations("snail", EnemyAnimations);
-    Q.stageScene("background");
     Q.stageScene("level1");
     Q.stageScene('hud', 3, Q('Player').first().p);
     Q.audio.play("old_kentucky.mp3", {
