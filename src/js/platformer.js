@@ -26,7 +26,7 @@ require('Quintus/lib/quintus_tmx')(Quintus);
 // Set up an instance of the Quintus engine  and include
 // the Sprites, Scenes, Input and 2D module. The 2D module
 // includes the `TileLayer` class as well as the `2d` componet.
-var Q = window.Q = Quintus({audioSupported: [ 'wav','mp3','ogg' ]})
+var Q = window.Q = Quintus({audioSupported: [ /*'wav',*/'mp3','ogg' ]})
         .include("Sprites, Scenes, Input, 2D, Anim, Touch, UI, TMX, Audio")
         // Maximize this game to whatever the size of the browser is
         .setup({ maximize: true })
@@ -72,12 +72,14 @@ Q.Sprite.extend("Player",{
     this.on("jumped");
 
     Q.input.on("down",this,"checkDoor");
+
+    this.p.allowDuckNoise = true;
   },
 
   jump: function(obj) {
     // Only play sound once.
     if (!obj.p.playedJump) {
-      Q.audio.play('jump.mp3');
+      Q.audio.play('innovation.mp3');
       obj.p.playedJump = true;
     }
   },
@@ -206,6 +208,13 @@ Q.Sprite.extend("Player",{
       if(Q.inputs['down'] && !this.p.door) {
         this.p.ignoreControls = true;
         this.play("duck_" + this.p.direction);
+        if(this.p.allowDuckNoise) {
+          Q.audio.play('expands_the_mind.mp3');
+          this.p.allowDuckNoise = false;
+          setTimeout(function () {
+            this.p.allowDuckNoise = true;
+          }.bind(this), 1000);
+        }
         if(this.p.landed > 0) {
           this.p.vx = this.p.vx * (1 - dt*2);
         }
@@ -296,7 +305,7 @@ Q.Sprite.extend("Enemy", {
 
   die: function(col) {
     if(col.obj.isA("Player")) {
-      Q.audio.play('coin.mp3');
+      Q.audio.play('breakthrough.mp3');
       this.p.vx=this.p.vy=0;
       this.play('dead');
       this.p.dead = true;
@@ -396,6 +405,16 @@ Q.Collectable.extend("Heart", {
   }
 });
 
+Q.assetTypes['svg'] = 'Image';
+Q.scene('background', function (stage) {
+  var background = stage.insert(new Q.Repeater({ 
+    asset: 'background.svg',
+    scale: 0.5
+  }));
+  
+
+});
+
 Q.scene("level1",function(stage) {
   Q.stageTMX("level1.tmx",stage);
 
@@ -416,8 +435,10 @@ Q.scene('hud',function(stage) {
   container.fit(20);
 });
 
-Q.loadTMX("level1.tmx, collectables.json, doors.json, enemies.json, fire.mp3, jump.mp3, heart.mp3, hit.mp3, coin.mp3, player.json, player.png", function() {
+Q.loadTMX("level1.tmx, collectables.json, doors.json, enemies.json, fire.mp3, jump.mp3, heart.mp3, hit.mp3, coin.mp3, old_kentucky.mp3, innovation.mp3, breakthrough.mp3, expands_the_mind.mp3, player.json, player.png, background.svg", function() {
+
     Q.compileSheets("player.png","player.json");
+    Q.compileSheets("fleur.png", "fleur.json");
     Q.compileSheets("collectables.png","collectables.json");
     Q.compileSheets("enemies.png","enemies.json");
     Q.compileSheets("doors.png","doors.json");
@@ -432,6 +453,9 @@ Q.loadTMX("level1.tmx, collectables.json, doors.json, enemies.json, fire.mp3, ju
       duck_left: { frames:  [15], rate: 1/10, flip: "x" },
       climb: { frames:  [16, 17], rate: 1/3, flip: false }
     });
+    Q.animations("fleur", {
+      spin: { frames: [0,1,2,3], rate: 1/15, loop: true }
+    });
     var EnemyAnimations = {
       walk: { frames: [0,1], rate: 1/3, loop: true },
       dead: { frames: [2], rate: 1/10 }
@@ -439,9 +463,14 @@ Q.loadTMX("level1.tmx, collectables.json, doors.json, enemies.json, fire.mp3, ju
     Q.animations("fly", EnemyAnimations);
     Q.animations("slime", EnemyAnimations);
     Q.animations("snail", EnemyAnimations);
+    Q.stageScene("background");
     Q.stageScene("level1");
     Q.stageScene('hud', 3, Q('Player').first().p);
-  
+    Q.audio.play("old_kentucky.mp3", {
+      loop: true,
+      loopStart: 6.66
+    });
+    
 }, {
   progressCallback: function(loaded,total) {
     var element = document.getElementById("loading_progress");
